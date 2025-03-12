@@ -1,6 +1,7 @@
 name: Test (Multiplatform)
 
 on:
+  workflow_dispatch:
   push:
     paths:
     - "src/**.cs"
