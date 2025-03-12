@@ -23,6 +23,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(NiTiS_NativePackage)' == ''">
+		<PackageReadmeFile Condition="'$(NiTiS_CustomREADME)' != ''">$(NiTiS_CustomREADME)</PackageReadmeFile>
+		<PackageReadmeFile Condition="'$(NiTiS_CustomREADME)' == ''">NUGET_README.md</PackageReadmeFile>
 		<DebugType>portable</DebugType>
 		<EmbedAllSources>true</EmbedAllSources>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -65,10 +67,6 @@
 
 	<!-- Setup README file -->
 	<Target Name="NiTiS_Shaderc_AddREADME" Condition="'$(IsPackable)' == 'true' and '$(NiTiS_CustomREADME)' == ''">
-		<PropertyGroup>
-			<PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
-		</PropertyGroup>
-
 		<ItemGroup>
 			<None Include ="$(MSBuildThisFileDirectory)../public/NUGET_README.md" Pack="true" PackagePath="/" />
 		</ItemGroup>

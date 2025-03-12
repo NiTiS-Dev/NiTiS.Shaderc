@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<NiTiS_NativePackage>true</NiTiS_NativePackage>
-		<NiTiS_CustomREADME>true</NiTiS_CustomREADME>
+		<NiTiS_CustomREADME>NUGET_README.md</NiTiS_CustomREADME>
 	</PropertyGroup>
 
 	<Import Project="../../build/common.props" />
