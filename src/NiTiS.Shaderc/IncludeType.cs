@@ -1,5 +1,8 @@
 namespace NiTiS.Shaderc;
 
+/// <summary>
+/// Kind of include directive.
+/// </summary>
 public enum IncludeType
 {
 	/// <summary>

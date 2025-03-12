@@ -110,5 +110,36 @@ public static unsafe partial class ShadercApi
 
 	[DllImport(LibraryName)]
 	public static extern void shaderc_compile_options_set_auto_map_locations(CompileOptionsHandle options, bool autoMap);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_hlsl_register_set_and_binding_for_stage(
+		CompileOptionsHandle options, ShaderKind shader,
+		byte* reg,
+		byte* set,
+		byte* binding
+	);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_hlsl_register_set_and_binding(
+		CompileOptionsHandle options,
+		byte* reg,
+		byte* set,
+		byte* binding
+	);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_hlsl_functionality1(CompileOptionsHandle options, bool enabled);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_hlsl_16bit_types(CompileOptionsHandle options, bool enabled);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_vulkan_rules_relaxed(CompileOptionsHandle options, bool enabled);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_invert_y(CompileOptionsHandle options, bool inverted);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_compile_options_set_nan_clamp(CompileOptionsHandle options, bool inverted);
 #pragma warning restore
 }

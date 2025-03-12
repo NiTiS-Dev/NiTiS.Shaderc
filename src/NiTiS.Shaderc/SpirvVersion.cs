@@ -1,4 +1,4 @@
-namespace NiTiS;
+namespace NiTiS.Shaderc;
 
 /// <summary>
 /// The known versions of SPIR-V.

@@ -15,7 +15,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>NiTiS</RootNamespace>
 
 		<VersionPrefix>0.1.4</VersionPrefix>
 
