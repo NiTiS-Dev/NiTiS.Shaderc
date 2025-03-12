@@ -1,5 +1,8 @@
 namespace NiTiS.Shaderc;
 
+/// <summary>
+/// Kind of shader.
+/// </summary>
 public enum ShaderKind
 {
 	// Forced shader kinds. These shader kinds force the compiler to compile the

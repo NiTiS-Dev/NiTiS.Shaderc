@@ -1,15 +1,17 @@
+using System;
+
 namespace NiTiS.Shaderc;
 
-public readonly struct ShaderCompiler : IDisposable
+public readonly struct CompilerHandle : IDisposable
 {
 	public readonly IntPtr Handle;
 
-	internal ShaderCompiler(nint handle)
+	internal CompilerHandle(nint handle)
 	{
 		Handle = handle;
 	}
 
-	public ShaderCompiler()
+	public CompilerHandle()
 	{
 		this = shaderc_compiler_initialize();
 	}

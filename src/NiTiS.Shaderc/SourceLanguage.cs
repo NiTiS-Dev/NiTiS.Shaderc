@@ -1,13 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NiTiS.Shaderc;
 
+/// <summary>
+/// Source language.
+/// </summary>
 public enum SourceLanguage
 {
-	Glsl,
-	Hlsl
+	/// <summary>
+	/// OpenGL Shading Language.
+	/// </summary>
+	GLSL,
+
+	/// <summary>
+	/// High-Level Shader Language.
+	/// </summary>
+	HLSL,
 }
