@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<NiTiS_NativePackage>true</NiTiS_NativePackage>
+		<NiTiS_CustomREADME>true</NiTiS_CustomREADME>
 	</PropertyGroup>
 
 	<Import Project="../../build/common.props" />
@@ -10,6 +11,7 @@
 		<Content Include="build/**" PackagePath="build/%(RecursiveDir)%(Filename)%(Extension)" />
 		<Content Include="build/**" PackagePath="buildTransitive/%(RecursiveDir)%(Filename)%(Extension)" />
 		<Content Include="runtimes/**" PackagePath="runtimes/%(RecursiveDir)%(Filename)%(Extension)" />
+		<Content Include="NUGET_README.md" PackagePath="NUGET_README.md" />
 		<Content Include="_._" PackagePath="lib/net461/_._" />
 		<Content Include="_._" PackagePath="lib/netstandard2.0/_._" />
 	</ItemGroup>

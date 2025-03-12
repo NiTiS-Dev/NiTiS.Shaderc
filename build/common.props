@@ -17,7 +17,7 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>NiTiS</RootNamespace>
 
-		<VersionPrefix>0.1</VersionPrefix>
+		<VersionPrefix>0.1.4</VersionPrefix>
 
 		<NoWarn>$(NoWarn);IDE0290;IDE0305</NoWarn>
 	</PropertyGroup>
@@ -64,7 +64,7 @@
 	</Target>
 
 	<!-- Setup README file -->
-	<Target Name="NiTiS_Shaderc_AddREADME" Condition="'$(IsPackable)' == 'true'">
+	<Target Name="NiTiS_Shaderc_AddREADME" Condition="'$(IsPackable)' == 'true' and '$(NiTiS_CustomREADME)' == ''">
 		<PropertyGroup>
 			<PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
 		</PropertyGroup>
