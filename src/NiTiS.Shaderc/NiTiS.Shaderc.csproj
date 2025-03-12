@@ -6,4 +6,8 @@
 
 	<Import Project="../../build/common.props" />
 
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
+	</ItemGroup>
+
 </Project>
