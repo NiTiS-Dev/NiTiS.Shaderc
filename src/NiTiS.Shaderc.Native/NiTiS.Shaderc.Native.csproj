@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<NiTiS_NativePackage>true</NiTiS_NativePackage>
+		<TargetFrameworks>netstandard2.0;net4.6.1</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="build/**" PackagePath="build/%(RecursiveDir)%(Filename)%(Extension)" />
+		<Content Include="build/**" PackagePath="buildTransitive/%(RecursiveDir)%(Filename)%(Extension)" />
+		<Content Include="runtimes/**" PackagePath="runtimes/%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+</Project>

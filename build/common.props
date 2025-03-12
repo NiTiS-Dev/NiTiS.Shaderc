@@ -1,9 +1,10 @@
-<Project InitialTargets="MutableString_SetIcon;MutableString_AddREADME">
+<Project InitialTargets="NiTiS_Shaderc_SetIcon;NiTiS_Shaderc_AddREADME">
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Authors>NiTiSon and contributors</Authors>
-		<PackageTags>$(PackageTags);string;mutable;fast</PackageTags>
-		<Description>Mutable string implementation</Description>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Authors>NiTiS-Dev and contributors</Authors>
+		<PackageTags>$(PackageTags);native;binding;bindings;shaders;shaderc;compiler;multiplatform</PackageTags>
+		<Description>Multi-platform native library binding for shaderc.</Description>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<TargetFrameworks>net9.0;net6.0</TargetFrameworks>
 
@@ -16,10 +17,12 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>NiTiS</RootNamespace>
 
-		<VersionPrefix>1.2</VersionPrefix>
+		<VersionPrefix>1.0</VersionPrefix>
 
 		<NoWarn>$(NoWarn);IDE0290;IDE0305</NoWarn>
+	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(NiTiS_NativePackage)' == ''">
 		<DebugType>portable</DebugType>
 		<EmbedAllSources>true</EmbedAllSources>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -27,7 +30,11 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(IsPackable)' == 'true'">
+	<PropertyGroup Condition="'$(NiTiS_NativePackage)' == 'true'">
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(IsPackable)' == 'true' and '$(NiTiS_NativePackage)' == ''">
 		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1" PrivateAssets="All"/>
 		<PackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" PrivateAssets="All"/>
 	</ItemGroup>
@@ -45,7 +52,7 @@
 	</PropertyGroup>
 
 	<!-- Setup the icon for libraries -->
-	<Target Name="MutableString_SetIcon" Condition="'$(IsPackable)' == 'true'">
+	<Target Name="NiTiS_Shaderc_SetIcon" Condition="'$(IsPackable)' == 'true'">
 		<PropertyGroup>
 			<PackageIcon>logo.png</PackageIcon>
 		</PropertyGroup>
@@ -56,7 +63,7 @@
 	</Target>
 
 	<!-- Setup README file -->
-	<Target Name="MutableString_AddREADME" Condition="'$(IsPackable)' == 'true'">
+	<Target Name="NiTiS_Shaderc_AddREADME" Condition="'$(IsPackable)' == 'true'">
 		<PropertyGroup>
 			<PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
 		</PropertyGroup>

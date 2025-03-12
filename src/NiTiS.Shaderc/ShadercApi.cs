@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace NiTiS.Shaderc;
 
+/// <summary>
+/// Direct API for <c>shaderc</c> library.
+/// </summary>
 public static unsafe partial class ShadercApi
 {
 	private const string LibraryName = "shaderc_shared";

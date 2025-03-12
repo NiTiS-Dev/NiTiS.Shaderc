@@ -1,0 +1,1 @@
+# NiTiS.Shaderc C# binding to `shaderc` library
