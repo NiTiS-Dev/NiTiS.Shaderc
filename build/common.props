@@ -1,0 +1,69 @@
+<Project InitialTargets="MutableString_SetIcon;MutableString_AddREADME">
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>NiTiSon and contributors</Authors>
+		<PackageTags>$(PackageTags);string;mutable;fast</PackageTags>
+		<Description>Mutable string implementation</Description>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<TargetFrameworks>net9.0;net6.0</TargetFrameworks>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageOutputPath>$(MSBuildThisFileDirectory)/../outPackages</PackageOutputPath>
+
+		<LangVersion>latest</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>NiTiS</RootNamespace>
+
+		<VersionPrefix>1.2</VersionPrefix>
+
+		<NoWarn>$(NoWarn);IDE0290;IDE0305</NoWarn>
+
+		<DebugType>portable</DebugType>
+		<EmbedAllSources>true</EmbedAllSources>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(IsPackable)' == 'true'">
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1" PrivateAssets="All"/>
+		<PackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.1.1" PrivateAssets="All"/>
+	</ItemGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
+		<IsAotCompatible>true</IsAotCompatible>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+		<IsTrimmable>true</IsTrimmable>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<TrimMode>full</TrimMode>
+	</PropertyGroup>
+
+	<!-- Setup the icon for libraries -->
+	<Target Name="MutableString_SetIcon" Condition="'$(IsPackable)' == 'true'">
+		<PropertyGroup>
+			<PackageIcon>logo.png</PackageIcon>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<None Include="$(MSBuildThisFileDirectory)../public/logo.png" Pack="true" PackagePath="/" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Setup README file -->
+	<Target Name="MutableString_AddREADME" Condition="'$(IsPackable)' == 'true'">
+		<PropertyGroup>
+			<PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<None Include ="$(MSBuildThisFileDirectory)../public/NUGET_README.md" Pack="true" PackagePath="/" />
+		</ItemGroup>
+	</Target>
+
+</Project>
