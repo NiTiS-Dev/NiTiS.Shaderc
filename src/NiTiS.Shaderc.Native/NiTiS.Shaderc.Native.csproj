@@ -2,8 +2,9 @@
 
 	<PropertyGroup>
 		<NiTiS_NativePackage>true</NiTiS_NativePackage>
-		<TargetFrameworks>netstandard2.0;net4.6.1</TargetFrameworks>
 	</PropertyGroup>
+
+	<Import Project="../../build/common.props" />
 
 	<ItemGroup>
 		<Content Include="build/**" PackagePath="build/%(RecursiveDir)%(Filename)%(Extension)" />

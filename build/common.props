@@ -32,6 +32,7 @@
 
 	<PropertyGroup Condition="'$(NiTiS_NativePackage)' == 'true'">
 		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<TargetFrameworks>netstandard2.0;net4.6.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(IsPackable)' == 'true' and '$(NiTiS_NativePackage)' == ''">

@@ -3,5 +3,7 @@
 	<PropertyGroup>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
-	
+
+	<Import Project="../../build/common.props" />
+
 </Project>
