@@ -141,5 +141,73 @@ public static unsafe partial class ShadercApi
 
 	[DllImport(LibraryName)]
 	public static extern void shaderc_compile_options_set_nan_clamp(CompileOptionsHandle options, bool inverted);
+
+	[DllImport(LibraryName)]
+	public static extern CompilationResultHandle shaderc_compile_into_spv(
+		CompilerHandle compiler,
+		byte* sourceText,
+		nuint sourceTextSize,
+		ShaderKind shaderKind,
+		byte* inputSourceName,
+		byte* entryPointName,
+		CompileOptionsHandle additionalOptions
+	);
+
+	[DllImport(LibraryName)]
+	public static extern CompilationResultHandle shaderc_compile_into_spv_assembly(
+		CompilerHandle compiler,
+		byte* sourceText,
+		nuint sourceTextSize,
+		ShaderKind shaderKind,
+		byte* inputSourceName,
+		byte* entryPointName,
+		CompileOptionsHandle additionalOptions
+	);
+
+	[DllImport(LibraryName)]
+	public static extern CompilationResultHandle shaderc_compile_into_preprocessed_text(
+		CompilerHandle compiler,
+		byte* sourceText,
+		nuint sourceTextSize,
+		ShaderKind shaderKind,
+		byte* inputSourceName,
+		byte* entryPointName,
+		CompileOptionsHandle additionalOptions
+	);
+
+	[DllImport(LibraryName)]
+	public static extern CompilationResultHandle shaderc_assemble_into_spv(
+		CompilerHandle compiler,
+		byte* sourceAssembly,
+		nuint sourceAssemblySize,
+		CompileOptionsHandle additionalOptions
+	);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_result_release(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern nuint shaderc_result_get_length(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern nuint shaderc_result_get_num_warnings(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern nuint shaderc_result_get_num_errors(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern CompilationStatus shaderc_result_get_compilation_status(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern byte* shaderc_result_get_bytes(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern byte* shaderc_result_get_error_message(CompilationResultHandle result);
+
+	[DllImport(LibraryName)]
+	public static extern void shaderc_get_spv_version(uint* version, uint* revision);
+
+	[DllImport(LibraryName)]
+	public static extern bool shaderc_parse_version_profile(byte* str, int* version, Profile* profile);
 #pragma warning restore
 }
