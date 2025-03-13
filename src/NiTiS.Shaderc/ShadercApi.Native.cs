@@ -63,7 +63,7 @@ public static unsafe partial class ShadercApi
 	public static extern void shaderc_compile_options_set_suppress_warnings(CompileOptionsHandle options);
 
 	[DllImport(LibraryName)]
-	public static extern void shaderc_compile_options_set_target_env(CompileOptionsHandle options, TargetEnvironment environment, uint version);
+	public static extern void shaderc_compile_options_set_target_env(CompileOptionsHandle options, TargetEnvironment environment, EnvironmentVersion version);
 
 	[DllImport(LibraryName)]
 	public static extern void shaderc_compile_options_set_target_spirv(CompileOptionsHandle options, SpirvVersion version);

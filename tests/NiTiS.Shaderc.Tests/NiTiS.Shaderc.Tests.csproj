@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<!-- There's no net5.0 'cause NUnit doesn't support it -->
+		<TargetFrameworks>net9.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
@@ -14,7 +14,7 @@
 		<PackageReference Include="NUnit" Version="4.2.2" />
 		<PackageReference Include="NUnit.Analyzers" Version="4.4.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-		<PackageReference Include="NiTiS.Shaderc.Native" Version="0.1.4" />
+		<PackageReference Include="NiTiS.Shaderc.Native" Version="0.2.0" />
 
 		<ProjectReference Include="..\..\src\NiTiS.Shaderc\NiTiS.Shaderc.csproj" />
 
