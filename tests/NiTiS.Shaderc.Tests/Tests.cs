@@ -154,6 +154,11 @@ public class Tests
 
 		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl\0"u8, "main\0"u8, options);
 
+		if (result.ErrorCount != 0)
+		{
+			Assert.Warn(result.ErrorMessage ?? string.Empty);
+		}
+
 		Assert.That(result.Status, Is.EqualTo(CompilationStatus.Success));
 
 		GC.KeepAlive(callbacks);
