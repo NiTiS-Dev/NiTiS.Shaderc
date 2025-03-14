@@ -124,12 +124,13 @@ public class Tests
 				{
 					gl_Position = vec4(aPos, 1.0);
 				}
-				"""u8;
+				"""u8 + "\0"u8;
 
 				result->UserData = userData;
 				result->ContentLength = (nuint)content.Length;
 				result->ContentPtr = (byte*)NativeMemory.Alloc(result->ContentLength);
-				result->SourceNameLength = 10;
+				result->SourceNameLength = 10 + 1;
+				result->SourceNamePtr[10] = 0;
 				result->SourceNamePtr = (byte*)NativeMemory.Alloc(result->SourceNameLength);
 				"core.glsl"u8.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->SourceNameLength));
 				content.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->ContentLength));
