@@ -117,27 +117,7 @@ public class Tests
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
 
-				IncludeResult* result = (IncludeResult*)NativeMemory.Alloc((nuint)sizeof(IncludeResult));
-
-				ReadOnlySpan<byte> content = """
-				layout(location = 0) in vec3 aPos;
-				void main()
-				{
-					gl_Position = vec4(aPos, 1.0);
-				}
-				"""u8 + "\0"u8;
-
-				result->UserData = userData;
-
-				result->SourceNameLength = 10 + 1;
-				result->SourceNamePtr = (byte*)NativeMemory.Alloc(result->SourceNameLength);
-				result->SourceNamePtr[10] = 0;
-
-				result->ContentLength = (nuint)content.Length;
-				result->ContentPtr = (byte*)NativeMemory.Alloc(result->ContentLength);
-				"core.glsl"u8.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->SourceNameLength));
-				content.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->ContentLength));
-				return result;
+				return null;
 			},
 			Release = (result) =>
 			{

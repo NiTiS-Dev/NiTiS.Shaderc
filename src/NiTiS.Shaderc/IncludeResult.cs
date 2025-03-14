@@ -1,8 +1,11 @@
+using System.Runtime.InteropServices;
+
 namespace NiTiS.Shaderc;
 
 /// <summary>
 /// Result of include directive.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 public unsafe struct IncludeResult
 {
 	/// <summary>
