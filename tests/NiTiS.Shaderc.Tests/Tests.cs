@@ -113,6 +113,7 @@ public class Tests
 		{
 			Resolve = (userData, requested, includeType, requestor, depth) =>
 			{
+				Console.WriteLine($"{(nuint)userData}, {(nuint)requested}, {(nuint)requestor}, {includeType}");
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
 
@@ -127,11 +128,13 @@ public class Tests
 				"""u8 + "\0"u8;
 
 				result->UserData = userData;
+
+				result->SourceNameLength = 10 + 1;
+				result->SourceNamePtr = (byte*)NativeMemory.Alloc(result->SourceNameLength);
+				result->SourceNamePtr[10] = 0;
+
 				result->ContentLength = (nuint)content.Length;
 				result->ContentPtr = (byte*)NativeMemory.Alloc(result->ContentLength);
-				result->SourceNameLength = 10 + 1;
-				result->SourceNamePtr[10] = 0;
-				result->SourceNamePtr = (byte*)NativeMemory.Alloc(result->SourceNameLength);
 				"core.glsl"u8.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->SourceNameLength));
 				content.CopyTo(MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(result->SourceNamePtr), (int)result->ContentLength));
 				return result;
