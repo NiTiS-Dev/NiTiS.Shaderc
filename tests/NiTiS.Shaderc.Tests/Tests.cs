@@ -117,14 +117,37 @@ public class Tests
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
 
-				return (IncludeResult*)NativeMemory.AllocZeroed((nuint)sizeof(IncludeResult));
+				IncludeResult* result = (IncludeResult*)NativeMemory.AllocZeroed((nuint)sizeof(IncludeResult));
+
+				ReadOnlySpan<byte> content = """
+				layout(location = 0) in vec3 aPos;
+				void main()
+				{
+					gl_Position = vec4(aPos, 1.0);
+				}
+				"""u8;
+
+				result->ContentLength = (nuint)content.Length;
+				result->ContentPtr = (byte*)NativeMemory.AllocZeroed(result->ContentLength);
+
+				result->SourceNameLength = 10;
+				result->SourceNamePtr = (byte*)NativeMemory.AllocZeroed((nuint)"core.glsl"u8.Length);
+
+				fixed (byte* pContent = content)
+				{
+					Buffer.MemoryCopy(pContent, result->ContentPtr, result->ContentLength, result->ContentLength);
+				}
+
+				fixed (byte* pName = "core.glsl"u8)
+				{
+					Buffer.MemoryCopy(pName, result->SourceNamePtr, result->SourceNameLength, result->SourceNameLength);
+				}
+
+				return result;
 			},
 			Release = (result) =>
 			{
-				if (result == null) return;
-				NativeMemory.Free(result->SourceNamePtr);
-				NativeMemory.Free(result->ContentPtr);
-				NativeMemory.Free(result);
+				// Skip for now
 			}
 		};
 		options.ProvideIncludeCallbacks(callbacks, null);
@@ -132,7 +155,7 @@ public class Tests
 		ReadOnlySpan<byte> source =
 			"""
 			#version 330 core
-			#include <core.glsl>
+			#include "core.glsl"
 			"""u8;
 
 		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl\0"u8, "main\0"u8, options);
