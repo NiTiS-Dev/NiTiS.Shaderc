@@ -117,7 +117,7 @@ public class Tests
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
 				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
 
-				return null;
+				return (IncludeResult*)NativeMemory.AllocZeroed((nuint)sizeof(IncludeResult));
 			},
 			Release = (result) =>
 			{
