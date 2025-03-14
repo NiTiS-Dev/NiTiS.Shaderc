@@ -52,6 +52,52 @@ public readonly struct CompileOptionsHandle : IDisposable, ICloneable
 	}
 
 	/// <summary>
+	/// Set compiler automatic uniform binding option.
+	/// </summary>
+	public bool AutoBindUniforms
+	{
+		set
+		{
+			shaderc_compile_options_set_auto_bind_uniforms(this, value);
+		}
+	}
+
+	/// <summary>
+	/// Set whether the compiler should automatically remove sampler variables
+	/// and convert image variables to combined image-sampler variables.
+	/// </summary>
+	public bool AutoCombinedImageSampler
+	{
+		set
+		{
+			shaderc_compile_options_set_auto_combined_image_sampler(this, value);
+		}
+	}
+
+	/// <summary>
+	/// Set whether the compiler should use HLSL IO mapping rules for bindings.
+	/// </summary>
+	public bool HlslIOMapping
+	{
+		set
+		{
+			shaderc_compile_options_set_hlsl_io_mapping(this, value);
+		}
+	}
+
+	/// <summary>
+	/// Set whether the compiler should determine block member offsets using HLSL packing rules
+	/// instead of standard GLSL rules.
+	/// </summary>
+	public bool HlslOffsets
+	{
+		set
+		{
+			shaderc_compile_options_set_hlsl_offsets(this, value);
+		}
+	}
+
+	/// <summary>
 	/// Create a clone of current options instance.
 	/// </summary>
 	/// <returns>New separate <see cref="CompileOptionsHandle"/> instance.</returns>
@@ -133,15 +179,25 @@ public readonly struct CompileOptionsHandle : IDisposable, ICloneable
 	/// </summary>
 	/// <param name="version">The same number as would appear in the <c>#version</c> annotation in the source.</param>
 	/// <param name="profile">Profile, or <see cref="Profile.None"/> for versions, that not define profiles.</param>
-	public void SetForceVersion(uint version, Profile profile)
+	public void ForceSetVersion(uint version, Profile profile)
 	{
 		shaderc_compile_options_set_forced_version_profile(this, version, profile);
 	}
 
-	//public void RegisterIncludeResolver(object resolver)
-	//{
-
-	//}
+	/// <summary>
+	/// Provide user-defined include callbacks.
+	/// </summary>
+	/// <param name="callbacks">Callbacks.</param>
+	/// <param name="userData">Custom user data.</param>
+	public unsafe void ProvideIncludeCallbacks(IncludeCallbacks callbacks, void* userData)
+	{
+		shaderc_compile_options_set_include_callbacks(
+			this,
+			(shaderc_include_resolve_fn)Marshal.GetFunctionPointerForDelegate(callbacks.Resolve),
+			(shaderc_include_result_release_fn)Marshal.GetFunctionPointerForDelegate(callbacks.Release),
+			userData
+		);
+	}
 
 	/// <summary>
 	/// Compiler will suppress warnings.
@@ -185,5 +241,38 @@ public readonly struct CompileOptionsHandle : IDisposable, ICloneable
 	public void ThreatWarningAsErrors()
 	{
 		shaderc_compile_options_set_warnings_as_errors(this);
+	}
+
+	/// <summary>
+	/// Set up limit.
+	/// </summary>
+	/// <param name="limit">The limit.</param>
+	/// <param name="value">Maximum allowed value.</param>
+	public void SetLimit(Limit limit, uint value)
+	{
+		shaderc_compile_options_set_limit(this, limit, value);
+	}
+
+	/// <summary>
+	/// Set the base binding number used for a uniform resource type
+	/// when automatically assigning bindings.
+	/// </summary>
+	/// <param name="uniform">Uniform.</param>
+	/// <param name="base">Base.</param>
+	public void SetBindingBase(UniformKind uniform, uint @base)
+	{
+		shaderc_compile_options_set_binding_base(this, uniform, @base);
+	}
+
+	/// <summary>
+	/// Set the base binding number used for a uniform resource type
+	/// when automatically assigning bindings.
+	/// </summary>
+	/// <param name="shader">Specific stage.</param>
+	/// <param name="uniform">Uniform.</param>
+	/// <param name="base">Base.</param>
+	public void SetBindingBaseForStage(ShaderKind shader, UniformKind uniform, uint @base)
+	{
+		shaderc_compile_options_set_binding_base_for_stage(this, shader, uniform, @base);
 	}
 }

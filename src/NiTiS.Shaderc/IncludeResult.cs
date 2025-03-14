@@ -6,9 +6,9 @@ namespace NiTiS.Shaderc;
 public unsafe struct IncludeResult
 {
 	/// <summary>
-	/// Utf8 source name.
+	/// Pointer to Utf8 source name.
 	/// </summary>
-	public byte* SourceName;
+	public byte* SourceNamePtr;
 
 	/// <summary>
 	/// Source name length in bytes.
@@ -16,9 +16,9 @@ public unsafe struct IncludeResult
 	public nuint SourceNameLength;
 
 	/// <summary>
-	/// Utf8 source content.
+	/// Pointer to Utf8 source content.
 	/// </summary>
-	public byte* Content;
+	public byte* ContentPtr;
 
 	/// <summary>
 	/// Source content length in bytes.
