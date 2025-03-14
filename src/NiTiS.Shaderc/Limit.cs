@@ -1,4 +1,4 @@
-namespace NiTiS;
+namespace NiTiS.Shaderc;
 
 /// <summary>
 /// Resource limits.
