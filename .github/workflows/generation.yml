@@ -65,9 +65,12 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      - name: Remove previous generated code
+        run: rm ./src/NiTiS.Shaderc/LowLevel/*.cs
+        continue-on-error: true
+
       - name: Generate code
         run: |
-          rm ./src/NiTiS.Shaderc/LowLevel/*.cs
           dotnet tool ClangSharpPInvokeGenerator -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_
 
       - name: Commit generated code
