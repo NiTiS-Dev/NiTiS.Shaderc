@@ -2,11 +2,9 @@
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 9 * * 1'
-
-
-
+#  schedule:
+#    - cron: '0 9 * * 1'
+    
 jobs:
   update-shaderc:
     runs-on: ubuntu-latest
