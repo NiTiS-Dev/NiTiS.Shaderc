@@ -49,64 +49,6 @@ jobs:
           git commit -m "Auto-update: Update submodules"
           git push
 
-
-  compile-shaderc:
-    needs: update-shaderc
-    if: ${{ needs.update-shaderc.outputs.submodules_changed == 'true' || github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - arch: x86_64-linux
-            artifact: libshadderc_shared.so
-            target: linux-x64
-          - arch: arm-linux
-            artifact: libshadderc_shared.so
-            target: linux-arm64
-          - arch: x86_64-win32
-            artifact: shadderc_shared.dll
-            target: win-x86
-          - arch: x86-win32
-            artifact: shadderc_shared.dll
-            target: win-x64
-          - arch: arm-win32
-            artifact: shadderc_shared.dll
-            target: win-arm64
-
-
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.22.1'
-
-      - name: Download dependencies
-        run: |
-          cd ./3rd-party/shaderc/
-          python3 utils/git-sync-deps
-
-      - name: Compile
-        run: |
-          cd ./3rd-party/shaderc/
-          mkdir build
-          cd build
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ matrix.config.arch }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
-          cmake --build . --target shaderc_shared --config Release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: shaderc_shared-${{ matrix.platform }}
-          path: ./3rd-party/shaderc/build/libshaderc/${{ matrix.config.artifact }}
-
-
   generate-code:
     needs: update-shaderc
     if: ${{ needs.update-shaderc.outputs.submodules_changed == 'true' || github.event_name == 'workflow_dispatch' }}
