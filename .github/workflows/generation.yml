@@ -1,6 +1,7 @@
 ﻿name: Generation
 
 on:
+  push:
   schedule:
     - cron: '0 9 * * 1'
   workflow_dispatch:
