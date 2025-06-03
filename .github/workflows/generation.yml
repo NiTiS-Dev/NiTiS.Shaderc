@@ -65,11 +65,15 @@ jobs:
           cmake-version: '3.17.x'
 
       - name: Download dependencies
-        run: python3 utils/git-sync-deps
+        run: |
+          cd 3rd-party/shaderc/
+          python3 utils/git-sync-deps
 
       - name: Compile
         run: |
+          cd 3rd-party/shaderc/
           mkdir build
+          cd build
           cmake ../
           cmake --build . --config Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
 
