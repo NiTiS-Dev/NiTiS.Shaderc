@@ -41,7 +41,7 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_optimization_level"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_optimization_level", ExactSpelling = true)]
-    public static extern void compile_options_set_optimization_level([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_optimization_level")] OptimizationLeve level);
+    public static extern void compile_options_set_optimization_level([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_optimization_level")] OptimizationLevel level);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_forced_version_profile"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_forced_version_profile", ExactSpelling = true)]
