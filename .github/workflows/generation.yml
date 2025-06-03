@@ -58,11 +58,11 @@ jobs:
       matrix:
         os:
           - linux
-          - win
+          - win32
         arch:
           - x86_64
           - x86
-          - arm64
+          - arm
 
     steps:
       - name: Checkout repository
