@@ -59,6 +59,11 @@ jobs:
         os: [ ubuntu-latest ]
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
@@ -66,12 +71,12 @@ jobs:
 
       - name: Download dependencies
         run: |
-          cd 3rd-party/shaderc/
+          cd ./3rd-party/shaderc/
           python3 utils/git-sync-deps
 
       - name: Compile
         run: |
-          cd 3rd-party/shaderc/
+          cd ./3rd-party/shaderc/
           mkdir build
           cd build
           cmake ../
