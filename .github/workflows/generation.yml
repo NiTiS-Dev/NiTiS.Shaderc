@@ -56,9 +56,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        - arch: x86
-        - arch: x86_64
-        - arch: arm64
+        os:
+          - linux
+          - win
+        arch:
+          - x86_64
+          - x86
+          - arm64
 
     steps:
       - name: Checkout repository
@@ -81,7 +85,7 @@ jobs:
           cd ./3rd-party/shaderc/
           mkdir build
           cd build
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ strategy.matrix.arch }}-${{ strategy.matrix.os }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
           cmake --build . --target shaderc_shared --config Release
 
 
