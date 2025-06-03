@@ -56,11 +56,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest ]
+        os: [ ubuntu-latest ]
 
     steps:
-      - name: Stub
-        run: echo Temporally not ready
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.17.x'
+
+      - name: Download dependencies
+        run: python3 utils/git-sync-deps
+
+      - name: Compile
+        run: |
+          mkdir build
+          cmake ../
+          cmake --build . --config Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
 
 
   generate-code:
@@ -86,7 +97,7 @@ jobs:
       - name: Generate code
         run: |
           dotnet tool restore
-          dotnet tool run ClangSharpPInvokeGenerator -l shaderc -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_
+          dotnet tool run ClangSharpPInvokeGenerator -l shaderc_shared -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_
 
       - name: Commit generated code
         run: |
