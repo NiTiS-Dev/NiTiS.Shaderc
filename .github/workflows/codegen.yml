@@ -1,0 +1,73 @@
+﻿name: Codegen
+
+on:
+  cron: '0 0 * * *'
+  workflow_dispatch:
+
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+
+      - name: Get current submodule hash
+        id: submodule-hash
+        run: |
+          echo "hash_before=$(git submodule status | sha256sum | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+
+      - name: Update submodules
+        run: git submodule update --remote --recursive
+
+      - name: Get updated submodule hash
+        id: submodule-hash-after
+        run: |
+          echo "hash_after=$(git submodule status | sha256sum | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+
+      - name: Check if submodules changed
+        id: check-changes
+        run: |
+          if [ "${{ steps.submodule-hash.outputs.hash_before }}" != "${{ steps.submodule-hash-after.outputs.hash_after }}" ]; then
+            echo "submodules_changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in submodules"
+            git submodule status
+          else
+            echo "submodules_changed=false" >> $GITHUB_OUTPUT
+            echo "No changes in submodules"
+          fi
+
+      - name: Commit submodule updates
+        if: steps.check-changes.outputs.submodules_changed == 'true'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-update: Update submodules"
+          git push
+
+  generate-code:
+    needs: update-submodules
+    if: needs.update-submodules.outputs.submodules_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Generate code
+        run: |
+          dotnet tool ClangSharpPInvokeGenerator
+
+      - name: Commit generated code
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-update: Regenerate code"
+          git push
+
