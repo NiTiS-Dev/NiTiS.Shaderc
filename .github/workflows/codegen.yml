@@ -1,12 +1,13 @@
 ﻿name: Codegen
 
 on:
-  cron: '0 0 * * *'
+  schedule:
+    - cron: '0 9 * * 1'
   workflow_dispatch:
 
 
 jobs:
-  generate:
+  update-shaderc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
