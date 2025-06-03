@@ -5,29 +5,6 @@ using System.Runtime.InteropServices;
 namespace NiTiS.Shaderc;
 
 /// <summary>
-/// Prevent managed delegates from being collected during garbage collecting.
-/// </summary>
-/// <remarks>
-/// This instance shall have shared lifetime with <see cref="CompileOptionsHandle"/> instance. THIS INSTANCE SHALL LIVE AT ANY COST.
-/// </remarks>
-public struct IncludeCallbacks : IDisposable
-{
-	/// <summary>
-	/// Resolve handle.
-	/// </summary>
-	public ResolveInclude Resolve { get; set; }
-
-	/// <summary>
-	/// Release handle.
-	/// </summary>
-	public ReleaseIncludeResult Release { get; set; }
-
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public readonly void Dispose() { }
-}
-
-/// <summary>
 /// Include resolver delegate.
 /// </summary>
 /// <param name="userData">Custom provided data.</param>

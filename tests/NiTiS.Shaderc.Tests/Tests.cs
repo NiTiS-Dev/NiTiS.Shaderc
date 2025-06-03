@@ -19,8 +19,8 @@ public class Tests
 	[Test]
 	public void Compile()
 	{
-		using var compiler = new CompilerHandle();
-		using var options = new CompileOptionsHandle();
+		using var compiler = new ShaderCompiler();
+		using var options = new CompileOptions();
 
 		ReadOnlySpan<byte> source =
 			"""
@@ -42,8 +42,8 @@ public class Tests
 	{
 		Assert.Throws<ArgumentException>(() =>
 		{
-			using var compiler = new CompilerHandle();
-			using var options = new CompileOptionsHandle();
+			using var compiler = new ShaderCompiler();
+			using var options = new CompileOptions();
 
 			ReadOnlySpan<byte> source =
 				"""
@@ -64,8 +64,8 @@ public class Tests
 	{
 		Assert.Throws<ArgumentException>(() =>
 		{
-			using var compiler = new CompilerHandle();
-			using var options = new CompileOptionsHandle();
+			using var compiler = new ShaderCompiler();
+			using var options = new CompileOptions();
 
 			ReadOnlySpan<byte> source =
 				"""
@@ -84,8 +84,8 @@ public class Tests
 	[Test]
 	public void CompileWithMacros()
 	{
-		using var compiler = new CompilerHandle();
-		using var options = new CompileOptionsHandle();
+		using var compiler = new ShaderCompiler();
+		using var options = new CompileOptions();
 		options.AddMacros("VOID_T", "void");
 		options.AddMacros("GL_POSITION"u8, "gl_Position"u8);
 
@@ -107,8 +107,8 @@ public class Tests
 	[Test]
 	public unsafe void CustomIncludeCallbacks()
 	{
-		using var compiler = new CompilerHandle();
-		using var options = new CompileOptionsHandle();
+		using var compiler = new ShaderCompiler();
+		using var options = new CompileOptions();
 		using var callbacks = new IncludeCallbacks
 		{
 			Resolve = (userData, requested, includeType, requestor, depth) =>

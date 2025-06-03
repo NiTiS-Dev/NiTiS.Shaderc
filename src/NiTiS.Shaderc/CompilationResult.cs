@@ -4,67 +4,46 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using NiTiS.Shaderc.LowLevel;
 
 namespace NiTiS.Shaderc;
 
 /// <summary>
-/// Compilation result handle.
+/// Compilation result.
 /// </summary>
-public readonly struct CompilationResultHandle : IDisposable
+public readonly unsafe struct CompilationResult : IDisposable, IEquatable<CompilationResult>
 {
+	private readonly shaderc_compilation_result* _result;
+
 	/// <summary>
 	/// Native result handle.
 	/// </summary>
-	public readonly IntPtr Handle;
+	public nint Handle => (nint)_result;
 
-	internal CompilationResultHandle(nint handle)
+	public CompilationResult(shaderc_compilation_result* result)
 	{
-		Handle = handle;
+		_result = result;
 	}
 
 	/// <summary>
 	/// Status of compilation.
 	/// </summary>
-	public CompilationStatus Status
-	{
-		get
-		{
-			return shaderc_result_get_compilation_status(this);
-		}
-	}
+	public CompilationStatus Status => ShadercApi.result_get_compilation_status(_result);
 
 	/// <summary>
 	/// Length of compilation output.
 	/// </summary>
-	public nuint Length
-	{
-		get
-		{
-			return shaderc_result_get_length(this);
-		}
-	}
+	public nuint Length => ShadercApi.result_get_length(_result);
 
 	/// <summary>
 	/// Amount of compilation warnings.
 	/// </summary>
-	public nuint WarningCount
-	{
-		get
-		{
-			return shaderc_result_get_num_warnings(this);
-		}
-	}
+	public nuint WarningCount => ShadercApi.result_get_num_warnings(_result);
 
 	/// <summary>
 	/// Amount of compilation errors.
 	/// </summary>
-	public nuint ErrorCount
-	{
-		get
-		{
-			return shaderc_result_get_num_errors(this);
-		}
-	}
+	public nuint ErrorCount => ShadercApi.result_get_num_errors(_result);
 
 	/// <summary>
 	/// Compiler error message.
@@ -78,7 +57,7 @@ public readonly struct CompilationResultHandle : IDisposable
 				return null;
 			}
 
-			byte* message = shaderc_result_get_error_message(this);
+			byte* message = (byte*)ShadercApi.result_get_error_message(_result);
 			Debug.Assert(message != null);
 #if NET6_0_OR_GREATER
 			ReadOnlySpan<byte> messageSpan = MemoryMarshal.CreateReadOnlySpanFromNullTerminated(message);
@@ -103,7 +82,7 @@ public readonly struct CompilationResultHandle : IDisposable
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		shaderc_result_release(this);
+		ShadercApi.result_release(_result);
 	}
 
 	/// <summary>
@@ -112,12 +91,11 @@ public readonly struct CompilationResultHandle : IDisposable
 	/// <returns>New allocated array with compilation result, if compilation is success; otherwise <see langword="null"/>.</returns>
 	public byte[]? CreateResultArray()
 	{
-		if (Status == CompilationStatus.Success)
-		{
-			byte[] result = new byte[Length];
+		if (Status != CompilationStatus.Success) return null;
 
-			CopyTo(result.AsSpan());
-		}
+		byte[] result = new byte[Length];
+
+		CopyTo(result.AsSpan());
 
 		return null;
 	}
@@ -126,9 +104,9 @@ public readonly struct CompilationResultHandle : IDisposable
 	/// Copy result output into provided span.
 	/// </summary>
 	/// <param name="output">The span to store output.</param>
-	public unsafe void CopyTo(Span<byte> output)
+	public void CopyTo(Span<byte> output)
 	{
-		byte* src = shaderc_result_get_bytes(this);
+		byte* src = (byte*)ShadercApi.result_get_bytes(_result);
 
 		if ((nuint)output.Length < Length)
 		{
@@ -146,7 +124,7 @@ public readonly struct CompilationResultHandle : IDisposable
 	/// </summary>
 	/// <param name="output">The array to store output.</param>
 	/// <param name="offset">The offset in the array where copying should start.</param>
-	public unsafe void CopyTo(byte[] output, int offset)
+	public void CopyTo(byte[] output, int offset)
 	{
 		Guard.IsNotNull(output);
 
@@ -155,11 +133,26 @@ public readonly struct CompilationResultHandle : IDisposable
 			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(offset), "Provided array doesn't have enough length to store the result.");
 		}
 
-		byte* src = shaderc_result_get_bytes(this);
+		byte* src = (byte*)ShadercApi.result_get_bytes(_result);
 
 		fixed (byte* pOutput = output)
 		{
 			Unsafe.CopyBlockUnaligned(pOutput + offset, src, (uint)Length);
 		}
+	}
+
+	public bool Equals(CompilationResult other)
+	{
+		return _result == other._result;
+	}
+
+	public override bool Equals(object? obj)
+	{
+		return obj is CompilationResult other && Equals(other);
+	}
+
+	public override int GetHashCode()
+	{
+		return unchecked((int)(long)_result);
 	}
 }
