@@ -33,7 +33,7 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_source_language"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_source_language", ExactSpelling = true)]
-    public static extern void compile_options_set_source_language([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_source_language lang);
+    public static extern void compile_options_set_source_language([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_source_language")] SourceLanguage lang);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_generate_debug_info"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_generate_debug_info", ExactSpelling = true)]
@@ -41,11 +41,11 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_optimization_level"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_optimization_level", ExactSpelling = true)]
-    public static extern void compile_options_set_optimization_level([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_optimization_level level);
+    public static extern void compile_options_set_optimization_level([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_optimization_level")] OptimizationLeve level);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_forced_version_profile"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_forced_version_profile", ExactSpelling = true)]
-    public static extern void compile_options_set_forced_version_profile([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, int version, shaderc_profile profile);
+    public static extern void compile_options_set_forced_version_profile([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, int version, [NativeTypeName("shaderc_profile")] Profile profile);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_include_callbacks"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_include_callbacks", ExactSpelling = true)]
@@ -57,11 +57,11 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_target_env"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_target_env", ExactSpelling = true)]
-    public static extern void compile_options_set_target_env([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_target_env target, [NativeTypeName("uint32_t")] uint version);
+    public static extern void compile_options_set_target_env([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_target_env")] TargetEnvironment target, [NativeTypeName("uint32_t")] uint version);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_target_spirv"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_target_spirv", ExactSpelling = true)]
-    public static extern void compile_options_set_target_spirv([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_spirv_version version);
+    public static extern void compile_options_set_target_spirv([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_spirv_version")] SpirvVersion version);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_warnings_as_errors"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_warnings_as_errors", ExactSpelling = true)]
@@ -69,7 +69,7 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_limit"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_limit", ExactSpelling = true)]
-    public static extern void compile_options_set_limit([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_limit limit, int value);
+    public static extern void compile_options_set_limit([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_limit")] Limit limit, int value);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_auto_bind_uniforms"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_auto_bind_uniforms", ExactSpelling = true)]
@@ -89,11 +89,11 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_binding_base"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_binding_base", ExactSpelling = true)]
-    public static extern void compile_options_set_binding_base([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_uniform_kind kind, [NativeTypeName("uint32_t")] uint @base);
+    public static extern void compile_options_set_binding_base([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_uniform_kind")] UniformKind kind, [NativeTypeName("uint32_t")] uint @base);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_binding_base_for_stage"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_binding_base_for_stage", ExactSpelling = true)]
-    public static extern void compile_options_set_binding_base_for_stage([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_shader_kind shader_kind, shaderc_uniform_kind kind, [NativeTypeName("uint32_t")] uint @base);
+    public static extern void compile_options_set_binding_base_for_stage([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_shader_kind")] ShaderKind shader_kind, [NativeTypeName("shaderc_uniform_kind")] UniformKind kind, [NativeTypeName("uint32_t")] uint @base);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_preserve_bindings"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_preserve_bindings", ExactSpelling = true)]
@@ -105,7 +105,7 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_hlsl_register_set_and_binding_for_stage"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_hlsl_register_set_and_binding_for_stage", ExactSpelling = true)]
-    public static extern void compile_options_set_hlsl_register_set_and_binding_for_stage([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, shaderc_shader_kind shader_kind, [NativeTypeName("const char *")] sbyte* reg, [NativeTypeName("const char *")] sbyte* set, [NativeTypeName("const char *")] sbyte* binding);
+    public static extern void compile_options_set_hlsl_register_set_and_binding_for_stage([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("shaderc_shader_kind")] ShaderKind shader_kind, [NativeTypeName("const char *")] sbyte* reg, [NativeTypeName("const char *")] sbyte* set, [NativeTypeName("const char *")] sbyte* binding);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_hlsl_register_set_and_binding"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_hlsl_register_set_and_binding", ExactSpelling = true)]
@@ -134,17 +134,17 @@ public static unsafe partial class ShadercApi
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_into_spv"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_into_spv", ExactSpelling = true)]
     [return: NativeTypeName("shaderc_compilation_result_t")]
-    public static extern shaderc_compilation_result* compile_into_spv([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, shaderc_shader_kind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
+    public static extern shaderc_compilation_result* compile_into_spv([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, [NativeTypeName("shaderc_shader_kind")] ShaderKind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_into_spv_assembly"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_into_spv_assembly", ExactSpelling = true)]
     [return: NativeTypeName("shaderc_compilation_result_t")]
-    public static extern shaderc_compilation_result* compile_into_spv_assembly([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, shaderc_shader_kind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
+    public static extern shaderc_compilation_result* compile_into_spv_assembly([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, [NativeTypeName("shaderc_shader_kind")] ShaderKind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_into_preprocessed_text"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_into_preprocessed_text", ExactSpelling = true)]
     [return: NativeTypeName("shaderc_compilation_result_t")]
-    public static extern shaderc_compilation_result* compile_into_preprocessed_text([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, shaderc_shader_kind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
+    public static extern shaderc_compilation_result* compile_into_preprocessed_text([NativeTypeName("const shaderc_compiler_t")] shaderc_compiler* compiler, [NativeTypeName("const char *")] sbyte* source_text, [NativeTypeName("size_t")] nuint source_text_size, [NativeTypeName("shaderc_shader_kind")] ShaderKind shader_kind, [NativeTypeName("const char *")] sbyte* input_file_name, [NativeTypeName("const char *")] sbyte* entry_point_name, [NativeTypeName("const shaderc_compile_options_t")] shaderc_compile_options* additional_options);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.assemble_into_spv"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_assemble_into_spv", ExactSpelling = true)]
@@ -172,7 +172,8 @@ public static unsafe partial class ShadercApi
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.result_get_compilation_status"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_result_get_compilation_status", ExactSpelling = true)]
-    public static extern shaderc_compilation_status result_get_compilation_status([NativeTypeName("const shaderc_compilation_result_t")] shaderc_compilation_result* param0);
+    [return: NativeTypeName("shaderc_compilation_status")]
+    public static extern CompilationStatus result_get_compilation_status([NativeTypeName("const shaderc_compilation_result_t")] shaderc_compilation_result* param0);
 
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.result_get_bytes"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_result_get_bytes", ExactSpelling = true)]
@@ -191,5 +192,5 @@ public static unsafe partial class ShadercApi
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.parse_version_profile"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_parse_version_profile", ExactSpelling = true)]
     [return: NativeTypeName("bool")]
-    public static extern byte parse_version_profile([NativeTypeName("const char *")] sbyte* str, int* version, shaderc_profile* profile);
+    public static extern byte parse_version_profile([NativeTypeName("const char *")] sbyte* str, int* version, [NativeTypeName("shaderc_profile *")] Profile* profile);
 }
