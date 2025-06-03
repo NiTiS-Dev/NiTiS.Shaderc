@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 9 * * 1'
-    
+
 jobs:
   update-shaderc:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
 
   generate-code:
     needs: update-shaderc
-    if: needs.update-shaderc.outputs.submodules_changed == 'true' || github.event == 'workflow_dispatch'
+    if: ${{ needs.update-shaderc.outputs.submodules_changed == 'true' || github.event == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -62,7 +62,7 @@ jobs:
       - name: Generate code
         run: |
           rm ./src/NiTiS.Shaderc/LowLevel/*.cs
-          dotnet tool ClangSharpPInvokeGenerator -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_ 
+          dotnet tool ClangSharpPInvokeGenerator -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_
 
       - name: Commit generated code
         run: |
