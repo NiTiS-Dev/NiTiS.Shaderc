@@ -97,14 +97,14 @@ jobs:
           cd ./3rd-party/shaderc/
           mkdir build
           cd build
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ matrix.triple }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ matrix.config.arch }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
           cmake --build . --target shaderc_shared --config Release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: shaderc_shared-${{ matrix.platform }}
-          path: ./3rd-party/shaderc/build/libshaderc/${{ matrix.artifact_name }}
+          path: ./3rd-party/shaderc/build/libshaderc/${{ matrix.config.artifact }}
 
 
   generate-code:
