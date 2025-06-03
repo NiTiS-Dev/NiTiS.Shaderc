@@ -55,14 +55,10 @@ jobs:
     if: ${{ needs.update-shaderc.outputs.submodules_changed == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        os:
-          - linux
-          - win32
-        arch:
-          - x86_64
-          - x86
-          - arm
+        triple:
+          - x86_64-linux
 
     steps:
       - name: Checkout repository
@@ -85,7 +81,7 @@ jobs:
           cd ./3rd-party/shaderc/
           mkdir build
           cd build
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ matrix.arch }}-${{ matrix.os }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="--target=${{ matrix.triple }} -D_CRT_SECURE_NO_WARNINGS" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../
           cmake --build . --target shaderc_shared --config Release
 
 
