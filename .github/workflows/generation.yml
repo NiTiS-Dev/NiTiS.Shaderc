@@ -1,4 +1,4 @@
-﻿name: Codegen
+﻿name: Generation
 
 on:
   schedule:
@@ -51,8 +51,8 @@ jobs:
           git push
 
   generate-code:
-    needs: update-submodules
-    if: needs.update-submodules.outputs.submodules_changed == 'true'
+    needs: update-shaderc
+    if: needs.update-shaderc.outputs.submodules_changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
