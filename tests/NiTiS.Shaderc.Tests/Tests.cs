@@ -12,7 +12,7 @@ public class Tests
 	{
 		Assert.DoesNotThrow(() =>
 		{
-			using var compiler = ShadercApi.shaderc_compiler_initialize(); // If this throw DllNotFoundException or something similar, it's critical error
+			using var compiler = new ShaderCompiler(); // If this throw DllNotFoundException or something similar, it's critical error
 		});
 	}
 

@@ -57,6 +57,11 @@ public readonly unsafe struct ShaderCompiler : IDisposable, IEquatable<ShaderCom
 		}
 	}
 
+	public static bool TryParseVersionProfile(string str, out int version, out Profile profile)
+	{
+		throw new NotImplementedException();
+	}
+
 	public static bool TryParseVersionProfile(ReadOnlySpan<byte> str, out int version, out Profile profile)
 	{
 		fixed (Profile* pProfile = &profile)
