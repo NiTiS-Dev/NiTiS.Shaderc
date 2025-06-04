@@ -1,5 +1,7 @@
 using CommunityToolkit.Diagnostics;
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NiTiS.Shaderc.LowLevel;
 
 namespace NiTiS.Shaderc;
@@ -44,5 +46,24 @@ public readonly unsafe struct ShaderCompiler : IDisposable, IEquatable<ShaderCom
 	public override int GetHashCode()
 	{
 		return unchecked((int)(long)_compiler);
+	}
+
+	public static void GetSpvVersion(out uint version, out uint revision)
+	{
+		fixed (uint* pVersion = &version)
+		fixed (uint* pRevision = &revision)
+		{
+			ShadercApi.get_spv_version(pVersion, pRevision);
+		}
+	}
+
+	public static bool TryParseVersionProfile(ReadOnlySpan<byte> str, out int version, out Profile profile)
+	{
+		fixed (Profile* pProfile = &profile)
+		fixed (int* pVersion = &version)
+		fixed (byte* pStr = str)
+		{
+			return ShadercApi.parse_version_profile((sbyte*)pStr, pVersion, pProfile).ToBool();
+		}
 	}
 }

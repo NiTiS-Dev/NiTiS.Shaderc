@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NiTiS.Shaderc.LowLevel;
 
@@ -126,22 +127,22 @@ public readonly unsafe struct CompileOptions : IDisposable, IEquatable<CompileOp
 
 	public void SetAutoBindUniforms(bool autoBind)
 	{
-		ShadercApi.compile_options_set_auto_bind_uniforms(_options, autoBind);
+		ShadercApi.compile_options_set_auto_bind_uniforms(_options, autoBind.ToByte());
 	}
 
 	public void SetAutoCombinedImageSampler(bool upgrade)
 	{
-		ShadercApi.compile_options_set_auto_combined_image_sampler(_options, upgrade);
+		ShadercApi.compile_options_set_auto_combined_image_sampler(_options, upgrade.ToByte());
 	}
 
 	public void SetHlslIOMapping(bool iomap)
 	{
-		ShadercApi.compile_options_set_hlsl_io_mapping(_options, iomap);
+		ShadercApi.compile_options_set_hlsl_io_mapping(_options, iomap.ToByte());
 	}
 
-	public void SetHlslIOMapping(bool offsets)
+	public void SetHlslOffects(bool offsets)
 	{
-		ShadercApi.compile_options_set_hlsl_offsets(_options, offsets);
+		ShadercApi.compile_options_set_hlsl_offsets(_options, offsets.ToByte());
 	}
 
 	public void SetBindingBase(UniformKind kind, uint @base)
@@ -149,18 +150,65 @@ public readonly unsafe struct CompileOptions : IDisposable, IEquatable<CompileOp
 		ShadercApi.compile_options_set_binding_base(_options, kind, @base);
 	}
 
-	public void SetBindingBaseForStage(ShaderKind stage, UniformKind kind, uint @base)
+	public void SetBindingBase(ShaderKind stage, UniformKind kind, uint @base)
 	{
 		ShadercApi.compile_options_set_binding_base_for_stage(_options, stage, kind, @base);
 	}
 
 	public void SetPreserveBindings(bool preserve)
 	{
-		ShadercApi.compile_options_set_preserve_bindings(_options, preserve);
+		ShadercApi.compile_options_set_preserve_bindings(_options, preserve.ToByte());
 	}
 
 	public void SetAutomapLocations(bool autoMap)
 	{
-		ShadercApi.compile_options_set_auto_map_locations(_options, autoMap);
+		ShadercApi.compile_options_set_auto_map_locations(_options, autoMap.ToByte());
+	}
+
+	public void SetHlslRegisterSetAndBinding(ShaderKind kind, ReadOnlySpan<byte> reg, ReadOnlySpan<byte> set, ReadOnlySpan<byte> binding)
+	{
+		fixed (byte* pReg = reg)
+		fixed (byte* pSet = set)
+		fixed (byte* pBinding = binding)
+		{
+			ShadercApi.compile_options_set_hlsl_register_set_and_binding_for_stage(_options, kind, (sbyte*)pReg,
+				(sbyte*)pSet, (sbyte*)pBinding);
+		}
+	}
+
+	public void SetHlslRegisterSetAndBinding(ReadOnlySpan<byte> reg, ReadOnlySpan<byte> set, ReadOnlySpan<byte> binding)
+	{
+		fixed (byte* pReg = reg)
+		fixed (byte* pSet = set)
+		fixed (byte* pBinding = binding)
+		{
+			ShadercApi.compile_options_set_hlsl_register_set_and_binding(_options, (sbyte*)pReg, (sbyte*)pSet,
+				(sbyte*)pBinding);
+		}
+	}
+
+	public void SetHlslFunctionality1(bool enable)
+	{
+		ShadercApi.compile_options_set_hlsl_functionality1(_options, enable.ToByte());
+	}
+
+	public void SetHlsl16BitTypes(bool enable)
+	{
+		ShadercApi.compile_options_set_hlsl_16bit_types(_options, enable.ToByte());
+	}
+
+	public void SetVulkanRulesRelaxed(bool enabled)
+	{
+		ShadercApi.compile_options_set_vulkan_rules_relaxed(_options, enabled.ToByte());
+	}
+
+	public void SetInvertY(bool enable)
+	{
+		ShadercApi.compile_options_set_invert_y(_options, enable.ToByte());
+	}
+
+	public void SetNanClamp(bool enable)
+	{
+		ShadercApi.compile_options_set_nan_clamp(_options, enable.ToByte());
 	}
 }
