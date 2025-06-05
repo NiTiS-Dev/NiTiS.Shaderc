@@ -16,7 +16,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
-		<VersionPrefix>0.4</VersionPrefix>
+		<VersionPrefix>1.0</VersionPrefix>
 
 		<NoWarn>$(NoWarn);IDE0290;IDE0305</NoWarn>
 	</PropertyGroup>

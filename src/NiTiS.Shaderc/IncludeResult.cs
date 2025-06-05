@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NiTiS.Shaderc.LowLevel;
 
 namespace NiTiS.Shaderc;
 
@@ -32,4 +34,14 @@ public unsafe struct IncludeResult
 	/// Custom data.
 	/// </summary>
 	public void* UserData;
+
+	public static implicit operator shaderc_include_result(IncludeResult self)
+	{
+		return Unsafe.As<IncludeResult, shaderc_include_result>(ref self);
+	}
+
+	public static implicit operator IncludeResult(shaderc_include_result self)
+	{
+		return Unsafe.As<shaderc_include_result, IncludeResult>(ref self);
+	}
 }

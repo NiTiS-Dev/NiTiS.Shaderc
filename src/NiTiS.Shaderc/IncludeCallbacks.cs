@@ -13,12 +13,12 @@ namespace NiTiS.Shaderc;
 /// <param name="requestingSource">The caller source.</param>
 /// <param name="includeDepth">Include depth.</param>
 /// <returns>Unmanaged pointer to <see cref="IncludeResult"/> instance.</returns>
-[UnmanagedFunctionPointer(CallingConvention.Winapi)]
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate IncludeResult* ResolveInclude(void* userData, byte* requestedSource, IncludeType include, byte* requestingSource, nuint includeDepth);
 
 /// <summary>
 /// Release allocated <see cref="IncludeResult"/> instance.
 /// </summary>
 /// <param name="result">Instance to be released.</param>
-[UnmanagedFunctionPointer(CallingConvention.Winapi)]
-public unsafe delegate void ReleaseIncludeResult(IncludeResult* result);
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public unsafe delegate void ReleaseIncludeResult(void* userData, IncludeResult* result);

@@ -10,7 +10,7 @@ namespace NiTiS.Shaderc;
 /// </summary>
 public readonly unsafe struct CompileOptions : IDisposable, IEquatable<CompileOptions>, ICloneable
 {
-	private readonly shaderc_compile_options* _options;
+	internal readonly shaderc_compile_options* _options;
 
 	/// <summary>
 	/// Native options handle.
@@ -85,9 +85,34 @@ public readonly unsafe struct CompileOptions : IDisposable, IEquatable<CompileOp
 		}
 	}
 
-	public void AddMacro(string name, string? value)
+	public void AddMacro(string name, [Optional] string? value)
 	{
-		throw new NotImplementedException();
+		byte* pName = null;
+		byte* pValue = null;
+		try
+		{
+			nuint pValueLength = 0;
+			pName = Utf8String.AllocateNotNullTerminated(name, out nuint pNameLength);
+			pValue = value is null ? null : Utf8String.AllocateNotNullTerminated(value, out pValueLength);
+
+			ShadercApi.compile_options_add_macro_definition(_options, (sbyte*)pName, pNameLength, (sbyte*)pValue, pValueLength);
+		}
+		finally
+		{
+			Utf8String.Free(pName);
+			Utf8String.Free(pValue);
+		}
+	}
+
+	public void ProvideIncludeResolver(IncludeResolver resolver, [Optional] nint userData)
+	{
+		nint resolve = Marshal.GetFunctionPointerForDelegate(resolver._resolve);
+		nint release = Marshal.GetFunctionPointerForDelegate(resolver._release);
+		ShadercApi.compile_options_set_include_callbacks(_options,
+			(delegate* unmanaged[Cdecl]<void*, sbyte*, int, sbyte*, nuint, shaderc_include_result*>)resolve,
+			(delegate* unmanaged[Cdecl]<void*, shaderc_include_result*, void>)release,
+			(void*)userData
+			);
 	}
 
 	public void EnableGenerateDebugInfo()

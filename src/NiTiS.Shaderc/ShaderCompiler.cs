@@ -48,6 +48,46 @@ public readonly unsafe struct ShaderCompiler : IDisposable, IEquatable<ShaderCom
 		return unchecked((int)(long)_compiler);
 	}
 
+	public CompilationResult CompileIntoSpv(string source, ShaderKind shaderKind, string path, string entry, CompileOptions compileOptions)
+	{
+		byte* pSource = null;
+		byte* pPath = null;
+		byte* pEntry = null;
+		try
+		{
+			pSource = Utf8String.AllocateNotNullTerminated(source, out nuint pSourceLength);
+			pPath = Utf8String.AllocateNullTerminated(path);
+			pEntry = Utf8String.AllocateNullTerminated(entry);
+
+			return new(ShadercApi.compile_into_spv(_compiler, (sbyte*)pSource, pSourceLength, shaderKind, (sbyte*)pPath,
+				(sbyte*)pEntry, compileOptions._options));
+		}
+		finally
+		{
+			Utf8String.Free((byte*)pSource);
+			Utf8String.Free(pPath);
+			Utf8String.Free(pEntry);
+		}
+	}
+
+	public CompilationResult CompileIntoSpv(ReadOnlySpan<byte> source, ShaderKind shaderKind, ReadOnlySpan<byte> path,
+		ReadOnlySpan<byte> entryPoint, CompileOptions options)
+	{
+		fixed (byte* pSource = source)
+		fixed (byte* pPath = path)
+		fixed (byte* pEntry = entryPoint)
+		{
+			return new(ShadercApi.compile_into_spv(_compiler, (sbyte*)pSource, (nuint)source.Length, shaderKind,
+				(sbyte*)pPath, (sbyte*)pEntry, options._options));
+		}
+	}
+
+	public static (uint Version, uint Revision) GetSpvVersion()
+	{
+		GetSpvVersion(out uint version, out uint revision);
+		return (version, revision);
+	}
+
 	public static void GetSpvVersion(out uint version, out uint revision)
 	{
 		fixed (uint* pVersion = &version)
@@ -59,7 +99,21 @@ public readonly unsafe struct ShaderCompiler : IDisposable, IEquatable<ShaderCom
 
 	public static bool TryParseVersionProfile(string str, out int version, out Profile profile)
 	{
-		throw new NotImplementedException();
+		byte* pUtf8Str = null;
+		try
+		{
+			pUtf8Str = Utf8String.AllocateNullTerminated(str);
+
+			fixed (Profile* pProfile = &profile)
+			fixed (int* pVersion = &version)
+			{
+				return ShadercApi.parse_version_profile((sbyte*)pUtf8Str, pVersion, pProfile).ToBool();
+			}
+		}
+		finally
+		{
+			Utf8String.Free(pUtf8Str);
+		}
 	}
 
 	public static bool TryParseVersionProfile(ReadOnlySpan<byte> str, out int version, out Profile profile)

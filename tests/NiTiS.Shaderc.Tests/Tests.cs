@@ -17,6 +17,28 @@ public class Tests
 	}
 
 	[Test]
+	public void Parse()
+	{
+		bool result = ShaderCompiler.TryParseVersionProfile("450core", out int version, out Profile profile);
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(result, Is.True);
+			Assert.That(version, Is.EqualTo(450));
+			Assert.That(profile, Is.EqualTo(Profile.Core));
+		});
+
+		result = ShaderCompiler.TryParseVersionProfile("450core"u8, out version, out profile);
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(result, Is.True);
+			Assert.That(version, Is.EqualTo(450));
+			Assert.That(profile, Is.EqualTo(Profile.Core));
+		});
+	}
+
+	[Test]
 	public void Compile()
 	{
 		using var compiler = new ShaderCompiler();
@@ -32,53 +54,9 @@ public class Tests
 			}
 			"""u8;
 
-		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl\0"u8, "main\0"u8, options);
+		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl"u8, "main"u8, options);
 
 		Assert.That(result.Status, Is.EqualTo(CompilationStatus.Success));
-	}
-
-	[Test]
-	public void CompileNoZeroTerminatorEntryPoint()
-	{
-		Assert.Throws<ArgumentException>(() =>
-		{
-			using var compiler = new ShaderCompiler();
-			using var options = new CompileOptions();
-
-			ReadOnlySpan<byte> source =
-				"""
-			#version 330 core
-			layout(location = 0) in vec3 aPos;
-			void main()
-			{
-				gl_Position = vec4(aPos, 1.0);
-			}
-			"""u8;
-
-			using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl"u8, "main"u8, options);
-		});
-	}
-
-	[Test]
-	public void CompileNoZeroTerminatorSourceName()
-	{
-		Assert.Throws<ArgumentException>(() =>
-		{
-			using var compiler = new ShaderCompiler();
-			using var options = new CompileOptions();
-
-			ReadOnlySpan<byte> source =
-				"""
-			#version 330 core
-			layout(location = 0) in vec3 aPos;
-			void main()
-			{
-				gl_Position = vec4(aPos, 1.0);
-			}
-			"""u8;
-
-			using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl"u8, "main\0"u8, options);
-		});
 	}
 
 	[Test]
@@ -86,8 +64,8 @@ public class Tests
 	{
 		using var compiler = new ShaderCompiler();
 		using var options = new CompileOptions();
-		options.AddMacros("VOID_T", "void");
-		options.AddMacros("GL_POSITION"u8, "gl_Position"u8);
+		options.AddMacro("VOID_T", "void");
+		options.AddMacro("GL_POSITION"u8, "gl_Position"u8);
 
 		ReadOnlySpan<byte> source =
 			"""
@@ -99,7 +77,7 @@ public class Tests
 			}
 			"""u8;
 
-		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl\0"u8, "main\0"u8, options);
+		using var result = compiler.CompileIntoSpv(source, ShaderKind.VertexShader, "source.glsl"u8, "main"u8, options);
 
 		Assert.That(result.Status, Is.EqualTo(CompilationStatus.Success));
 	}
@@ -109,23 +87,25 @@ public class Tests
 	{
 		using var compiler = new ShaderCompiler();
 		using var options = new CompileOptions();
-		using var callbacks = new IncludeCallbacks
-		{
-			Resolve = (userData, requested, includeType, requestor, depth) =>
+		using var callbacks = IncludeResolver.Create(
+			(userData, requested, includeType, requestor, depth) =>
 			{
 				Console.WriteLine($"{(nuint)userData}, {(nuint)requested}, {(nuint)requestor}, {includeType}");
-				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
-				Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
+				Assert.Multiple(() =>
+				{
+					Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requested)), Is.EqualTo("core.glsl"));
+					Assert.That(Encoding.UTF8.GetString(MemoryMarshal.CreateReadOnlySpanFromNullTerminated(requestor)), Is.EqualTo("source.glsl"));
+				});
 
 				IncludeResult* result = (IncludeResult*)NativeMemory.AllocZeroed((nuint)sizeof(IncludeResult));
 
 				ReadOnlySpan<byte> content = """
-				layout(location = 0) in vec3 aPos;
-				void main()
-				{
-					gl_Position = vec4(aPos, 1.0);
-				}
-				"""u8;
+				                             layout(location = 0) in vec3 aPos;
+				                             void main()
+				                             {
+				                             	gl_Position = vec4(aPos, 1.0);
+				                             }
+				                             """u8;
 
 				result->ContentLength = (nuint)content.Length;
 				result->ContentPtr = (byte*)NativeMemory.AllocZeroed(result->ContentLength);
@@ -145,12 +125,9 @@ public class Tests
 
 				return result;
 			},
-			Release = (result) =>
-			{
-				// Skip for now
-			}
-		};
-		options.ProvideIncludeCallbacks(callbacks, null);
+			(_, _) => {}
+		);
+		options.ProvideIncludeResolver(callbacks);
 
 		ReadOnlySpan<byte> source =
 			"""
