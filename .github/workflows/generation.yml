@@ -70,7 +70,7 @@ jobs:
 
       - name: Fetch and extract libClangSharp native binary
         run: |
-          dotnet package download libClangSharp.runtime.linux-x64 --version 21.1.8.2 --output ./nuget-cache
+          dotnet package download libClangSharp.runtime.linux-x64@21.1.8.2 --output ./nuget-cache
           mkdir -p ${{ github.workspace }}/llvm/lib
           cp ./nuget-cache/libclangsharp.runtime.linux-x64/21.1.8.2/runtimes/linux-x64/native/libClangSharp.so ${{ github.workspace }}/llvm/lib/
 
