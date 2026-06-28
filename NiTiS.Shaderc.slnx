@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".github/workflows/generation.yml" />
+    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/test.yml" />
+    <File Path="build/common.props" />
+    <File Path="public/NUGET_README.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/NiTiS.Shaderc.Native/NiTiS.Shaderc.Native.csproj" />
+  <Project Path="src/NiTiS.Shaderc/NiTiS.Shaderc.csproj" />
+  <Project Path="tests/NiTiS.Shaderc.Tests/NiTiS.Shaderc.Tests.csproj" />
+</Solution>
