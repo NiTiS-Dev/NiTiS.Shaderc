@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".config/dotnet-tools.json" />
     <File Path=".github/workflows/generation.yml" />
     <File Path=".github/workflows/publish.yml" />
     <File Path=".github/workflows/test.yml" />

@@ -99,6 +99,10 @@ public static unsafe partial class ShadercApi
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_preserve_bindings", ExactSpelling = true)]
     public static extern void compile_options_set_preserve_bindings([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("bool")] byte preserve_bindings);
 
+    /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_max_id_bound"]/*' />
+    [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_max_id_bound", ExactSpelling = true)]
+    public static extern void compile_options_set_max_id_bound([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("uint32_t")] uint max_id_bound);
+
     /// <include file='ShadercApi.xml' path='doc/member[@name="ShadercApi.compile_options_set_auto_map_locations"]/*' />
     [DllImport("shaderc_shared", CallingConvention = CallingConvention.Cdecl, EntryPoint = "shaderc_compile_options_set_auto_map_locations", ExactSpelling = true)]
     public static extern void compile_options_set_auto_map_locations([NativeTypeName("shaderc_compile_options_t")] shaderc_compile_options* options, [NativeTypeName("bool")] byte auto_map);
