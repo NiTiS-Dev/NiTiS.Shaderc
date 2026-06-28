@@ -74,6 +74,11 @@ jobs:
           mkdir -p ${{ github.workspace }}/llvm/lib
           cp ./nuget-cache/libclangsharp.runtime.linux-x64/21.1.8.2/runtimes/linux-x64/native/libClangSharp.so ${{ github.workspace }}/llvm/lib/
 
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "21.1.8"
+
       - name: Remove previous generated code
         run: rm ./src/NiTiS.Shaderc/LowLevel/*.cs
         continue-on-error: true
