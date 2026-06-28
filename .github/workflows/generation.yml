@@ -52,7 +52,7 @@ jobs:
   generate-code:
     needs: update-shaderc
     if: ${{ needs.update-shaderc.outputs.submodules_changed == 'true' || github.event_name == 'workflow_dispatch' }}
-    runs-on: windows-latest # Due to https://github.com/dotnet/ClangSharp/issues/586
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
