@@ -65,18 +65,24 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "21.1"
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Fetch and extract libClangSharp native binary
+        run: |
+          dotnet package download libClangSharp.runtime.linux-x64 --version 21.1.8.2 --output ./nuget-cache
+          mkdir -p ${{ github.workspace }}/llvm/lib
+          cp ./nuget-cache/libclangsharp.runtime.linux-x64/21.1.8.2/runtimes/linux-x64/native/libClangSharp.so ${{ github.workspace }}/llvm/lib/
 
       - name: Remove previous generated code
         run: rm ./src/NiTiS.Shaderc/LowLevel/*.cs
         continue-on-error: true
 
       - name: Generate code
+        env:
+          LD_LIBRARY_PATH: ${{ github.workspace }}/llvm/lib:${{ env.LD_LIBRARY_PATH }}
+          DYLD_LIBRARY_PATH: ${{ github.workspace }}/llvm/lib:${{ env.DYLD_LIBRARY_PATH || '' }}
         run: |
-          dotnet tool restore
           dotnet tool run ClangSharpPInvokeGenerator -l shaderc_shared -c preview-codegen multi-file generate-cpp-attributes generate-doc-includes generate-file-scoped-namespaces generate-helper-types log-exclusions log-potential-typedef-remappings log-visited-files -I ./3rd-party/shaderc/libshaderc/include/ -f ./3rd-party/shaderc/libshaderc/include/shaderc/shaderc.h ./3rd-party/shaderc/libshaderc/include/shaderc/env.h ./3rd-party/shaderc/libshaderc/include/shaderc/status.h --remap shaderc_compilation_status=@CompilationStatus shaderc_env_version=@EnvironmentVersion shaderc_include_type=@IncludeType shaderc_limit=@Limit shaderc_optimization_level=@OptimizationLevel shaderc_profile=@Profile shaderc_shader_kind=@ShaderKind shaderc_source_language=@SourceLanguage shaderc_spirv_version=@SpirvVersion shaderc_target_env=@TargetEnvironment shaderc_uniform_kind=@UniformKind bool=@bool -e shaderc_compilation_status shaderc_env_version shaderc_include_type shaderc_limit shaderc_optimization_level shaderc_profile shaderc_shader_kind shaderc_source_language shaderc_spirv_version shaderc_spirv_version shaderc_target_env shaderc_uniform_kind --methodClassName ShadercApi --namespace NiTiS.Shaderc.LowLevel --output ./src/NiTiS.Shaderc/LowLevel/ --prefixStrip shaderc_
 
       - name: Commit generated code
